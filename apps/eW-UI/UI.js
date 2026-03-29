@@ -1,6 +1,6 @@
 // === display ===
 
-g.col = Uint16Array([g.theme.bg, g.theme.bg2, g.theme.bgH, 0xce9b, 0x001D, 0x3299, 2220, 0x0F6A, 0xce9b, 0x0F6A, 0x00ff, 0xfff, 0xf00, 0xff000, 0x07FF, g.theme.fg]);
+g.col = Uint16Array([0, 8, 31, 0xce9b, 0x001D, 0x3299, 2220, 0x0F6A, 0xce9b, 0x0F6A, 0x00ff, 0xfff, 0xf00, 0xff000, 0x07FF, 65535]);
 g.setCol = (c, v) => { g.setColor(g.col[v]); };
 g.isOn = true;
 
@@ -351,7 +351,8 @@ ew.UI = {
       ew.face[0].exe();
       ew.face[0].exe = 0;
     }
-    if (ew.face[0].bar) ew.face[0].bar();
+    if (ew.face.appCurr.includes("-set")) ew.face[1].bar();
+    else ew.face[0].bar();
   },
   bar: function (i) {
     //"ram"
@@ -642,6 +643,7 @@ ew.sys.TC = {
 
       // ---- tap mode ----
       if (!this.step) {
+        ew.sys.buzz.nav(25);
         this.val.cur = this.val.cur + this.side;
         if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
         else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;

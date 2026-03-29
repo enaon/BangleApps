@@ -3,6 +3,7 @@
 // init UI
 eval(require('Storage').read('eW-UI.js'));
 ew.sys.TC.init();
+ew.face.app="eW-HR";
 
 // icons
 ew.UI.icon = {
@@ -657,7 +658,7 @@ ew.face[1] = {
         ew.UI.c.start(0, 1);
         ew.UI.c.end();
         ew.UI.ele.fill("_bar", 6, 0);
-        ew.UI.btn.img("bar", "_bar", 6, "eW-HR.img", "HR SETTINGS", 15, 0, 0.8, 1, 1);
+        ew.UI.btn.img("bar", "_bar", 6, ew.face.app+".img", "SETTINGS", 15, 0, 0.8, 1, 1);
 
     },
     clear: function(o) {
