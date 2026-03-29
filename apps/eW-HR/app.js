@@ -392,7 +392,7 @@ ew.face[0] = {
         const width = g.getWidth() - margin;
         const bottom = g.getHeight();
         const graphTop = 130;
-        const graphHeight = 45;
+        const graphHeight = 40;
         const fields = this.data.source.length;
         const space = 3;
         const topL = this.data.topL;
@@ -417,7 +417,7 @@ ew.face[0] = {
         let scale = graphHeight / this.data.max;
 
         if (update) {
-            let oldPos = this.data.posL; // προηγούμενη θέση
+            let oldPos = this.data.posL; 
             newPos; 
 
             let oldX = startX + oldPos * (bw + space);
@@ -425,17 +425,20 @@ ew.face[0] = {
             let oldBarH = oldEntry.bpm * scale;
 
             let color = topL < oldEntry.hr ? 13 : oldEntry.hr < btmL ? 4 : 9;
-
+            
+            // revert old pos
             g.setCol(1, color);
             g.fillRect(oldX, graphTop + graphHeight - oldBarH, oldX + bw, graphTop + graphHeight);
-
-            // 2. Βάλε highlight στη νέα επιλεγμένη μπάρα
+            g.setCol(1, 0);
+            g.fillRect(oldX, graphTop -5, oldX + bw, graphTop-2 );
+            // highlight new pos
             let newX = startX + newPos * (bw + space);
             let newEntry = this.data.source[newPos];
             let newBarH = newEntry.bpm * scale;
 
             g.setCol(1, 15); // highlight color
             g.fillRect(newX, graphTop + graphHeight - newBarH, newX + bw, graphTop + graphHeight);
+            g.fillRect(newX, graphTop -5, newX + bw, graphTop-2 );
 
         }
         else {
@@ -450,17 +453,10 @@ ew.face[0] = {
                 let color = topL < entry.hr ? 13 : entry.hr < btmL ? 4 : 9;
 
                 g.setCol(1, isSelected ? 15 : color);
+                if (isSelected) g.fillRect(x, graphTop -5, x + bw, graphTop-2 );
                 g.fillRect(x, graphTop + graphHeight - barH, x + bw, graphTop + graphHeight);
 
             }
-            /*
-                    // Highlight selected bar
-                    if (this.data.pos < fields) {
-                        let x = startX + this.data.pos * (bw + space);
-                        g.setCol(1, 14);
-                        g.drawRect(x - 1, graphTop - 1, x + bw + 1, graphTop + graphHeight + 1);
-                    }
-            */
         }
 
         if (this.tid) clearTimeout(this.tid);
@@ -596,6 +592,7 @@ ew.face[1] = {
             stepGoal: 10000,
             stepGoalNotification: false
         }, require("Storage").readJSON("health.json", true) || {});
+        
         this.dataString=["OFF","3","10","ALL"]
         this.page = 1;
         this.page1();
@@ -666,7 +663,7 @@ ew.face[1] = {
         ew.is.slide = 0;
         if (this.tid) clearTimeout(this.tid);
         this.tid = 0;
-        require("Storage").writeJSON("health.json", this.data);
+        if (this.data) require("Storage").writeJSON("health.json", this.data);
         return true;
     },
     off: function(o) {
