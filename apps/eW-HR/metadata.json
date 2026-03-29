@@ -11,6 +11,7 @@
   "readme": "README.md",
   "storage": [
     {"name":"eW-HR.app.js","url":"app.js"},
+    {"name":"eW-HR.json","url":"app.json"},
     {"name":"eW-HR.img","url":"app-icon.js","evaluate":true}
   ]
 }

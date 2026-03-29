@@ -1,14 +1,22 @@
+// === display ===
+
+g.col = Uint16Array([g.theme.bg, g.theme.bg2, g.theme.bgH, 0xce9b, 0x001D, 0x3299, 2220, 0x0F6A, 0xce9b, 0x0F6A, 0x00ff, 0xfff, 0xf00, 0xff000, 0x07FF, g.theme.fg]);
+g.setCol = (c, v) => { g.setColor(g.col[v]); };
+g.isOn = true;
+
 // === eW object === 
 
-global.ew = { "face":{},"sys": {}, "apps": {}, "dbg": 0, "logger": {}, "notify": {}, "log": [], "def": {}, "is": {}, "comm": {}, "tid": {}, "pin": {}, UI:{}};
+global.ew = { "face": {}, "sys": {}, "apps": {}, "dbg": 0, "logger": {}, "notify": {}, "log": [], "def": {}, "is": {}, "comm": {}, "tid": {}, "pin": {}, UI: {} };
 ew.pin = { BAT: D3, CHRG: D23, BUZZ: D19, BUZ0: 1, BL: D8, i2c: { SCL: D34, SDA: D33 }, touch: { SCL: D34, SDA: D33, RST: D35, INT: D36, SLP: 0xE5 }, disp: { CS: D5, DC: D6, RST: D7, BL: D8 }, acc: { SDA: D37, SLC: D38, INT: D39 } };
-Bangle.setOptions({ wakeOnTouch: 0, lockTimeout: 0, backlightTimeout: 0, wakeOnBTN1: 0, wakeOnTwist: 0, wakeOnFaceUp: 0, powerSave: 1, btnLoadTimeout: 5000 });
-Bangle.setLocked(0);
+//Bangle.setOptions({ wakeOnTouch: 0, lockTimeout: 0, backlightTimeout: 0, wakeOnBTN1: 0, wakeOnTwist: 0, wakeOnFaceUp: 0, powerSave: 1, btnLoadTimeout: 5000 });
+//Bangle.setLocked(0);
 ew.is.maxTx = 8;
+
 
 // === font support ===
 
 const font1 = atob("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAA/AAAAAAAAH/AAAAAAAA//AAAAAAAP//AAAAAAB///AAAAAAP///AAAAAB////AAAAAf////AAAAD////4AAAAf////AAAAH////4AAAA////+AAAAA////wAAAAA///+AAAAAA///gAAAAAA//8AAAAAAA//gAAAAAAA/4AAAAAAAA/AAAAAAAAA4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAH/AAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//h////AAA//h////AAA//h////AAA//h////AAA//h////AAA//h////AAA//h////AAA//h////AAA//h////AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////gD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4AAAH/AAA/4B/gH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////wAAAAA////wAAAAA////wAAAAA////wAAAAA////wAAAAA////wAAAAA////wAAAAA////wAAAAA////wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAAAAB/wAAAAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////x//AAA////x//AAA////x//AAA////x//AAA////x//AAA////x//AAA////x//AAA////x//AAA////x//AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/wB////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/4B////AAA/wB////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//gAAAAAAA//gAAAAAAA//gAAAAAAA//gAAAAAAA//gAAAAAAA//gAAAAAAA//gAAAAAAA//gAAAAAAA//gAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA/4AAAAAAAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA////wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA/4B/wH/AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAA///////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP+AAH/AAAAP+AAH/AAAAP+AAH/AAAAP+AAH/AAAAP+AAH/AAAAP+AAH/AAAAP+AAH/AAAAP+AAH/AAAAH+AAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
 const width1 = atob("ERkmHyYmJiYmJCYmEQ==");
 
 
@@ -46,7 +54,14 @@ Graphics.prototype.setFontLECO1976Regular14 = function () {
     width3, //atob("BAQHCQkNCQQGBggIBAYEBgkHCQkJCQkICQkEBAcIBwkKCQkJCQkICQkECAkHDAkJCAkJCQgJCQ0JCQkFBgU="),
     14 | 65536
   );
-}
+};
+
+const font4 = E.toString(require('heatshrink').decompress(atob("ABH/5k/+YVRh/AgfwBBoAEhgNBmEP//D//wBBgaEnkwj+Oh1x4cMmH//k//4FB4eOuFx/EMngaE+Ewnkch8OgfHgEDwEB4EA8fAuHwnE8hkPGovwj/+h154eemF/5kPn8Ag4fB8EA/kAmZwJFwNwgH4EoK4TE4N/wE4uEch0OgPDgCCFUpEA4eAuFwnEOjkB/0AKgIAImEwCIXOLoShDgHMgFzHwUMFYIADgZpDIgIMBn/wh5XBBAYREHZUAjkAn0AWYoANFhAIDACQdEGJxLBhzrBC4LtBGoLvBcAM4HI8P4EH/EDw4VB8Hgjk4g8HD4Ph4Ef8ED+A4IJAPA4EwXghuEJ5E8jkfh0O4cHmHDxgCBhgCBzkwv0Mh50FFwLzBhkB4YiBC4cM+HDv1w/P4nk8JgvAgJZB9kAuZ9B4AbBh//4f/BoJUH/kwn41B4PDHYPMhkzgcM4HDnFw4/4mH8UIvwg/+gex4PMmHjKAYCBh1wgP4gBQFHoZ3BQwJlBwExKQK3Ba4IZHAwPwj/+h15QYgCEz1wv/4h4bFAoMfwBEBC4vHNwODxvAv/gMgLbIAAkMhkDZwoAON4Mchk+gcPChopBgPgYILXBwC1BjkOhz7DI5PAgYMB5kAmYIODxEAXINwuE4h0cgPOgE/gEHwDRCMo0AhxWCDoPMmPza4ScBvAqCAAk/a4ZiD5/MmYaB5nD2cwv/AXg0P/kH/8DxgbC8HAnEwg4vB8bnB/kD/4aE//8n//d4gCGz1wv/4h88KBvAC4MDR4z9BGpIRBDRQ1Cc4JQTAQIjDDRQvDHA7UBeIxrNhnDwcwuH8hj3BGo4mCFgJECF4YIBCIgAHJoiPICxAKCh0AgIvFHAlw//4n6hJC4UegEP4EHnEDw4kB8HgjihKMo5uIDRIJC8EAj8Ag/AgeADYSGIBAgPBnAYBD4ccGAQaIa5qhBwFwv/4h6GJCgodFzkAvyRBXYo1J5kwn8Mg+DwPgv/8h/zGp3AmH4hk3GoPgv0ch6hFnkwj+Oh1x4YdBAQ2OuFxEIM8DQjIIHwjaHKAvwn/+gEBeRVw//4n6hFAoM/c4N8SgIEDeoM+AYQpBn41NuEA/AYCBAY1I+E8n0fgPOFAUHwEB8BDCueA/F8njYF+ArFnAaB/kB/8ADgI9DUAp3BXoUMh3Dg62BxkxXgPg4dwboU8a4oADh//4ZyB4D4FVQIIDCwi0BhxQGBYJOBjjABVQJTBEQJQEFhY+EJhAWBFwIpBG4QyBHJIbIBIQZBLAIINABbFGDIIAJBYMegHP4EzmEM5kDmcA5nAncwcAMAcAIAD//8n4IB4HAmAaBhkDI4IIBnFwg7zBDgIADgfwgP+gHhDRIIGDSpHEDRHtNZiLBbZKwEn/8j//hz+DABBQF5kwmZQB4cDmHABAM3h//wf/HAKhIeJM4gC8IAAh9D5/8mYRCeZoADGQMH5//2ZHFABhdB4f/SgIXBvCLBgEc8EOjjXGGYvDI4LOFKBcP/kDQwZ9DgIIB8CGLDQyhTa4qhCa4JiCVQM4uEH/EADgKCIXgYaRGp4IBV4oAHaAM/+AXBgJpBQwJ0GGokMgPjIAPAmY1B5kDmcA5gIB+EMvATBeZKhDIgM/LIPBKATXJJIIRBJQS9INYLODDQgQBMAMfAgccaIINBwEH4ADBgYgBGpdwgCzBnwIEh/4ga8FWYWHgFzwEP4EBG4N4gE/HYPgh0cYoQ1J5kAToMM4EDOAIIBm7XBwbMBGowjB4fAmKzB9kDuZUB4E8fYoAIFoMeJYPwj8+h0B4YLB4EMmAaKAAf8/k/NIIAMEYbRB4eAuF8/DQBRAQLBJZTPBhzWBwC9CAwLEEnAeH/5HB/6TB4f/+AIMLJoARA=")));
+Graphics.prototype.setFontTeletext10x18Ascii = function () {
+  g.setFontCustom(
+    font4, //E.toString(require('heatshrink').decompress(atob("ABH/5k/+YVRh/AgfwBBoAEhgNBmEP//D//wBBgaEnkwj+Oh1x4cMmH//k//4FB4eOuFx/EMngaE+Ewnkch8OgfHgEDwEB4EA8fAuHwnE8hkPGovwj/+h154eemF/5kPn8Ag4fB8EA/kAmZwJFwNwgH4EoK4TE4N/wE4uEch0OgPDgCCFUpEA4eAuFwnEOjkB/0AKgIAImEwCIXOLoShDgHMgFzHwUMFYIADgZpDIgIMBn/wh5XBBAYREHZUAjkAn0AWYoANFhAIDACQdEGJxLBhzrBC4LtBGoLvBcAM4HI8P4EH/EDw4VB8Hgjk4g8HD4Ph4Ef8ED+A4IJAPA4EwXghuEJ5E8jkfh0O4cHmHDxgCBhgCBzkwv0Mh50FFwLzBhkB4YiBC4cM+HDv1w/P4nk8JgvAgJZB9kAuZ9B4AbBh//4f/BoJUH/kwn41B4PDHYPMhkzgcM4HDnFw4/4mH8UIvwg/+gex4PMmHjKAYCBh1wgP4gBQFHoZ3BQwJlBwExKQK3Ba4IZHAwPwj/+h15QYgCEz1wv/4h4bFAoMfwBEBC4vHNwODxvAv/gMgLbIAAkMhkDZwoAON4Mchk+gcPChopBgPgYILXBwC1BjkOhz7DI5PAgYMB5kAmYIODxEAXINwuE4h0cgPOgE/gEHwDRCMo0AhxWCDoPMmPza4ScBvAqCAAk/a4ZiD5/MmYaB5nD2cwv/AXg0P/kH/8DxgbC8HAnEwg4vB8bnB/kD/4aE//8n//d4gCGz1wv/4h88KBvAC4MDR4z9BGpIRBDRQ1Cc4JQTAQIjDDRQvDHA7UBeIxrNhnDwcwuH8hj3BGo4mCFgJECF4YIBCIgAHJoiPICxAKCh0AgIvFHAlw//4n6hJC4UegEP4EHnEDw4kB8HgjihKMo5uIDRIJC8EAj8Ag/AgeADYSGIBAgPBnAYBD4ccGAQaIa5qhBwFwv/4h6GJCgodFzkAvyRBXYo1J5kwn8Mg+DwPgv/8h/zGp3AmH4hk3GoPgv0ch6hFnkwj+Oh1x4YdBAQ2OuFxEIM8DQjIIHwjaHKAvwn/+gEBeRVw//4n6hFAoM/c4N8SgIEDeoM+AYQpBn41NuEA/AYCBAY1I+E8n0fgPOFAUHwEB8BDCueA/F8njYF+ArFnAaB/kB/8ADgI9DUAp3BXoUMh3Dg62BxkxXgPg4dwboU8a4oADh//4ZyB4D4FVQIIDCwi0BhxQGBYJOBjjABVQJTBEQJQEFhY+EJhAWBFwIpBG4QyBHJIbIBIQZBLAIINABbFGDIIAJBYMegHP4EzmEM5kDmcA5nAncwcAMAcAIAD//8n4IB4HAmAaBhkDI4IIBnFwg7zBDgIADgfwgP+gHhDRIIGDSpHEDRHtNZiLBbZKwEn/8j//hz+DABBQF5kwmZQB4cDmHABAM3h//wf/HAKhIeJM4gC8IAAh9D5/8mYRCeZoADGQMH5//2ZHFABhdB4f/SgIXBvCLBgEc8EOjjXGGYvDI4LOFKBcP/kDQwZ9DgIIB8CGLDQyhTa4qhCa4JiCVQM4uEH/EADgKCIXgYaRGp4IBV4oAHaAM/+AXBgJpBQwJ0GGokMgPjIAPAmY1B5kDmcA5gIB+EMvATBeZKhDIgM/LIPBKATXJJIIRBJQS9INYLODDQgQBMAMfAgccaIINBwEH4ADBgYgBGpdwgCzBnwIEh/4ga8FWYWHgFzwEP4EBG4N4gE/HYPgh0cYoQ1J5kAToMM4EDOAIIBm7XBwbMBGowjB4fAmKzB9kDuZUB4E8fYoAIFoMeJYPwj8+h0B4YLB4EMmAaKAAf8/k/NIIAMEYbRB4eAuF8/DQBRAQLBJZTPBhzWBwC9CAwLEEnAeH/5HB/6TB4f/+AIMLJoARA="))),
+    33, 12, 18);
+};
 
 const font6 = atob("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");
 const width6 = atob("AwIEBgYIBwIEBAYGAwYCBgYGBgYHBgYGBgYCAwUGBQYIBwcHBwcGBwcEBgcGBwcHBgcHBwgHBwgHCAcEBgQGCAMGBgYGBgYGBgMFBgMIBgYGBgYGBgYGCAYGBgYCBggABwADBgQGBgYGBwcECAAHAAADAwUFBgYIBQgGBAgABggAAgYGCAgCBgQIBQYFAAgIBQYFBQMIBwQDBAUGBwcIBgcHBwcHBwgHBgYGBgQEBAQIBwcHBwcHBgcHBwcHCAYIBgYGBgYGCAYGBgYGAwMEBAYGBgYGBgYGBgYGBgYGBgY=");
@@ -62,12 +77,11 @@ Graphics.prototype.setFontDylex7x13 = function () {
   );
 };
 
-
 // === UI ===
 
 ew.UI = {
-  size : { _2x2: 20, _2x1: 25, _txt: 19, t1: 8, t2: 28, t3: 34, txt: 0.8, len: 1, sca: 0.75 },
-  pos : {
+  size: { _2x2: 20, _2x1: 25, _txt: 19, t1: 8, t2: 28, t3: 34, txt: 0.9, len: 1, sca: 0.63 },
+  pos: {
     _2x1: [25, [89],
       [45, 122],
       [176],
@@ -140,12 +154,9 @@ ew.UI = {
         if (txt1 != "fill") g.drawString(txt1, x - (g.stringWidth(txt1) / 2), y - (g.stringMetrics(txt1).height / 2));
       }
       if (txt2) {
-        if (process.env.BOARD == "BANGLEJS2") g.setFont("Vector", p[0] * ew.UI.size.txt); //g.setFont("Dylex7x13",2);
-        else g.setFont("Teletext10x18Ascii");
+        g.setFont("Vector", p[0] * ew.UI.size.txt);
         if (txt2 != "fill") g.drawString(txt2, x - (g.stringWidth(txt2) / 2), y + szY - 10 - (g.stringMetrics(txt2).height / 2));
       }
-      if (!ew.def.face.bpp) g.flip();
-      //coordinates
       if (ew.UI.c.get[loc])
         ew.UI.c.raw[loc] = ew.UI.c.raw[loc] + `${ew.UI.c.raw[loc] == " " ? '' : 'else '}if (${x}-${szX}<x&&x<${x}+${szX}&&${y}-${szY}<y&&y<${y}+${szY}) ew.UI.c.${loc}.${no}(${po},l);`;
     },
@@ -180,7 +191,6 @@ ew.UI = {
         g.setFontAlign(-1, -1);
 
       }
-      if (!ew.def.face.bpp) g.flip();
       //coordinates
       if (ew.UI.c.get[loc])
         ew.UI.c.raw[loc] = ew.UI.c.raw[loc] + `${ew.UI.c.raw[loc] == " " ? '' : 'else '}if (${x}-${szX}<x&&x<${x}+${szX}&&${y}-${szY}<y&&y<${y}+${szY}) ew.UI.c.${loc}.${no}(${po},l);`;
@@ -190,16 +200,10 @@ ew.UI = {
     img: function (loc, no, po, img, txt, fclr, bclr, size, side, tran) {
       let bSize = 1;
       size = size || 1;
-      if (process.env.BOARD == "P8" || process.env.BOARD == "P22" || process.env.BOARD == "PINETIME") img = 0;
-      // Check if it's a Bangle icon (ends with .img)
-      else if (img.endsWith('.img')) {
+      if (img.endsWith('.img')) {
         img = require("Storage").read(img);
         bSize = 1.3;
-      }
-      else if (img.endsWith('.face'))
-        img = require("heatshrink").decompress(atob(ew.face[0].data.img[img.split(".")[0]]));
-
-      else
+      } else
         img = require("heatshrink").decompress(atob(ew.UI.icon[img]));
 
       const p = (ew.UI.pos[no]);
@@ -224,18 +228,10 @@ ew.UI = {
         g.setCol(1, fclr);
         g.drawString(txt, xa + imgW, y - (p[0] * 1.7 * ew.UI.size.txt) / 2 + 2);
       }
-      else if (ew.def.face.txt && txt) {
-        g.drawImage(img, x - (imgW * ew.UI.size.sca * 0.65 / 2), (y - szY) + ((szY * 2) * (2 - ew.UI.size.txt) / 15), { scale: 0.75 * ew.UI.size.sca });
-        g.setCol(1, fclr);
-        if (process.env.BOARD == "BANGLEJS2") g.setFont("Teletext10x18Ascii");
-        else g.setFont("LECO1976Regular22");
-        g.drawString(txt, x - (g.stringWidth(txt) / 2), y + 2 + ((szY * 2) * (2 - ew.UI.size.txt) / 6));
-      }
       else
         g.drawImage(img, x - (imgW * ew.UI.size.sca * size / 2), y - (imgH * ew.UI.size.sca * size / 2), { scale: ew.UI.size.sca * size });
 
       img = 0;
-      if (!ew.def.face.bpp) g.flip();
       //coordinates
       if (ew.UI.c.get[loc])
         ew.UI.c.raw[loc] = ew.UI.c.raw[loc] + `${ew.UI.c.raw[loc] == " " ? '' : 'else '}if (${x}-${szX}<x&&x<${x}+${szX}&&${y}-${szY}<y&&y<${y}+${szY}) ew.UI.c.${loc}.${no}(${po},l);`;
@@ -251,13 +247,12 @@ ew.UI = {
         ew.UI.ntid = 0;
       }
       if (rst && !sel) {
-        //ew.UI.c.xy.replaceWith(new Function("x", "y", "l", 'setTimeout(()=>{' + ew.UI.c.raw.main + '},0);'));
         ew.UI.c.xy.replaceWith(new Function("x", "y", "l", '' + ew.UI.c.raw.main + ''));
 
         ew.is.slide = 0;
       }
       if (!ignr) {
-        ew.face.off();
+        //ew.face.off();
         const p = (ew.UI.pos[no]);
         let len = p[1].length;
         let x = p[1][(po - 1) % len];
@@ -267,7 +262,6 @@ ew.UI = {
         g.setCol(0, bclr);
         g.fillRect({ x: x - szX, y: y - szY, x2: x + szX, y2: y + szY, r: 10 });
         g.setCol(1, fclr);
-        //g.setFont("LECO1976Regular14",2);//
         g.setFont("LECO1976Regular22");
         if (txt1)
           g.drawString(txt1, x - (g.stringWidth(txt1) / 2), (txt2) ? ew.UI.pos._foot[1] : ew.UI.pos._foot[0]);
@@ -280,10 +274,8 @@ ew.UI = {
           ew.is.bar = 1;
           ew.is.slide = 0;
 
-          //ew.UI.c.raw[loc] = ew.UI.c.raw[loc] + `${ew.UI.c.raw[loc]==" "?'':'else '}if (${x}-${szX}<x&&x<${x}+${szX}&&${y}-${szY}<y&&y<${y}+${szY}) ew.UI.c.${loc}.${no}(${po},l);`;
           ew.UI.c.raw.bar = `if (x<120&&${y}-${szY}<y&&y<${y}+${szY}) ew.UI.c.bar._ntfy(1); else if (120<x&&${y}-${szY}<y&&y<${y}+${szY}) ew.UI.c.bar._ntfy(2);`;
           ew.UI.c.xy.replaceWith(new Function("x", "y", "l", '' + ew.UI.c.raw.main + ew.UI.c.raw.bar + ''));
-          //ew.UI.c.xy.replaceWith(new Function("x", "y", "l", 'setTimeout(()=>{' + ew.UI.c.raw.main + ew.UI.c.raw.bar + '},0);'));
         }
         else ew.UI.c.bar._ntfy = function () { };
         g.flip();
@@ -308,46 +300,36 @@ ew.UI = {
 
       if (!c) return;
 
-      let startX = p[0]; // αριστερή άκρη
-      let startY = p[1]; // πάνω άκρη
-      let endX = p[2]; // δεξιά άκρη
-      let height = p[3] - p[1]; // ύψος περιοχής
+      let startX = p[0];
+      let startY = p[1];
+      let endX = p[2];
+      let height = p[3] - p[1];
 
-      // Υπολογισμός διαστάσεων για τους κύκλους
       let availableWidth = endX - startX;
       let circleDiameter = Math.min(10, Math.floor(availableWidth / t) - 2);
       let circleRadius = Math.floor(circleDiameter / 3);
 
-      // Κεντρική ευθυγράμμιση
       let totalDotsWidth = circleDiameter * t + 2 * (t - 1);
       let startDrawingX = startX + Math.floor((availableWidth - totalDotsWidth) / 2);
       let centerY = startY + Math.floor(height / 2) - 1;
 
-      // Σχεδίαση όλων των κύκλων (background)
-      g.setCol(0, 4); // χρώμα μη-ενεργών
+      g.setCol(0, 4); // ÏÏÏ <= Î case Î try Î case Î undefined-Î false Î default Î false ÏÎ finally Ï <= Î default
       for (let i = 0; i < t; i++) {
         let x = startDrawingX + i * (circleDiameter + 2) + circleRadius;
         g.fillCircle(x, centerY, circleRadius);
       }
-
-      // Σχεδίαση ενεργού κύκλου
       if (c > 0 && c <= t) {
         g.setCol(0, clrF !== undefined ? clrF : 15);
         let activeX = startDrawingX + (c - 1) * (circleDiameter + 2) + circleRadius;
         g.fillCircle(activeX, centerY, circleRadius);
       }
-
-      if (!ew.def.face.bpp) g.flip();
     },
-
-
 
     fill: function (no, po, clr) {
       //"ram";
       let m = ew.UI.loc(no, po);
       g.setCol(0, clr);
       g.fillRect(m.x - m.szX, m.y - m.szY, m.x + m.szX, m.y + m.szY);
-      if (!ew.def.face.bpp) g.flip();
     },
 
     coord: function (loc, no, po) {
@@ -362,10 +344,7 @@ ew.UI = {
       ew.UI.ntid = 0;
     }
     ew.is.UIpri = 0;
-    if (ew.sys.TC.tid && ew.def.dev.touchtype === "816") {
-      clearTimeout(ew.sys.TC.tid);
-      ew.sys.TC.tid = 0;
-    }
+
     ew.is.bar = 0;
     ew.is.slide = 0;
     if (ew.face[0].exe) {
@@ -374,41 +353,42 @@ ew.UI = {
     }
     if (ew.face[0].bar) ew.face[0].bar();
   },
-bar: function (i) {
-  //"ram"
-  ew.is.UIpri = 0;
-  ew.is.bar = 1;
-  ew.is.slide = 0;
-  ew.UI.btn.ntfy(0, 1.3, 1);
-  ew.UI.ele.fill("_bar", 6, process.env.BOARD == "BANGLEJS2" ? 15 : 0);
-  ew.UI.c.start(0, 1);
+  bar: function (i) {
+    //"ram"
+    ew.is.UIpri = 0;
+    ew.is.bar = 1;
+    ew.is.slide = 0;
+    ew.UI.btn.ntfy(0, 1.3, 1);
+    ew.UI.ele.fill("_bar", 6, 15);
 
-  if (ew.face.appCurr != "q.panel") ew.UI.btn.img("bar", "_bar", 1, "ew_i_q.panel.img", "", 0, 15, 0, 0, 1);
-  if (ew.face.appCurr != "launcher") ew.UI.btn.img("bar", "_bar", 2, "ew_i_launcher.img", "", 0, 2, 0, 0, 1);
-  //if (require('Storage').read('ew_f_' + ew.face.appCurr + "-set")) ew.UI.btn.img("bar", "_bar", 3, "dash", "", 0, 3, 0, 1);
-  if (require('Storage').read('ew_f_' + ew.face.appCurr + "-set")) ew.UI.btn.img("bar", "_bar", 3, "ew_i_" + ew.face.appCurr + ".img", "", 0, 2, 0, 0, 1);
+    ew.UI.c.start(0, 1);
+    ew.UI.btn.img("bar", "_bar", 1, "clock", "", 0, 15, 0, 0, 1);
+    ew.UI.btn.img("bar", "_bar", 2, "launcher", "", 0, 2, 0, 0, 1);
+    if (!ew.face.appCurr.includes("-set")) ew.UI.btn.img("bar", "_bar", 3, "settings", "", 0, 2, 0, 0, 1);
+    ew.UI.c.end();
 
+    ew.UI.c.bar._bar = (i) => {
+      if (ew.UI.ntid && !ew.is.UIpri) {
+        clearTimeout(ew.UI.ntid);
+        ew.UI.ntid = 0;
+      }
+      if (i === 3) {
+        ew.sys.buzz.nav(ew.sys.buzz.type.ok);
+        ew.face[0].clear();
+        ew.face[1].init();
+        ew.face[1].show();
+      } else if (i === 1) {
+        ew.face.out();
+        Bangle.load();
+      } else {
+        ew.face.out();
+        setTimeout(()=>{Bangle.showLauncher()},50);
+      }
 
-  ew.UI.c.end();
-
-  ew.UI.c.bar._bar = (i) => {
-    ew.sys.buzz.nav(ew.sys.buzz.type.ok);
-    if (ew.UI.ntid && !ew.is.UIpri) {
-      clearTimeout(ew.UI.ntid);
-      ew.UI.ntid = 0;
-    }
-    if (i === 3) ew.face.go(ew.face.appCurr + "-set", 0);
-    else if (i === 1) ew.face.go("q.panel", 0, i);
-    else ew.face.go("launcher", 0, i);
-
-    /*else setTimeout(() => {
-      ew.sys.updt();
-      Bangle.showLauncher()
-    }, 100); //ew.face.go("launcher", 0, i);
-    */
-  };
-}
+    };
+  }
 };
+
 
 
 // === UI control ==
@@ -441,46 +421,23 @@ ew.UI.c = {
   }
 };
 
-//  === themes ===
-ew.UI.theme = {};
-ew.UI.theme.dark = {
-  btn: { onT: 15, onB: 4, offT: 11, offB: 2 },
-  menu: { onT: 15, onB: 4, offT: 15, offB: 2 },
-  slide: { onT: 15, onB: 4, offT: 15, offB: 2 },
-  ntfy: { text: 0, back: 15 },
-  clock: { minF: 15, minB: 1, hrF: 11, hrB: 1, secF: 15, secB: 1, dateF: 11, dateB: 0, batF: 11, batB: 0, back: 0, top: 0 }
-};
-ew.UI.theme.white = {
-  btn: { onT: 15, onB: 4, offT: 11, offB: 2 },
-  menu: { onT: 15, onB: 4, offT: 15, offB: 2 },
-  slide: { onT: 15, onB: 4, offT: 15, offB: 2 },
-  ntfy: { text: 0, back: 15 },
-  clock: { minF: 0, minB: 15, hrF: 10, hrB: 15, secF: 10, secB: 15, dateF: 11, dateB: 0, batF: 11, batB: 0, back: 0, top: 0 }
-};
-ew.UI.theme.current = ew.UI.theme.dark;
-
-
 // === UI navigation ===
 
 ew.UI.nav = {
   dn: function (x, y) {
     "ram";
-    /*	if (y < 50 && (process.env.BOARD == "BANGLEJS2")) {
-        return;
-    	
-      }
-    */
+    if (!ew.face.appCurr.includes("-set")) {
+      ew.sys.buzz.nav(ew.sys.buzz.type.na);
+      return;
+    }
     ew.sys.buzz.nav(ew.sys.buzz.type.ok);
     if (ew.UI.ntid && !ew.is.UIpri) {
       clearTimeout(ew.UI.ntid);
       ew.UI.ntid = 0;
     }
-    if (ew.face.appCurr == ew.def.face.main && ew.face.pageCurr != -1)
-      ew.face.go(ew.def.face.main, -1);
-    else if (ew.face.appCurr.endsWith("-set"))
-      ew.face.go(ew.face.appCurr.substring(0, ew.face.appCurr.length - 4), 0);
-    else
-      ew.face.go(ew.def.face.main, 0);
+    ew.face[1].clear();
+    ew.face[0].init();
+    ew.face[0].show();
   },
   up: function (x, y) {
     "ram";
@@ -490,7 +447,6 @@ ew.UI.nav = {
   },
   back: function () {
     ew.sys.buzz.nav(ew.sys.buzz.type.ok);
-    ew.face.go(ew.face.appRoot[0], ew.face.appRoot[1]);
   },
   next: function () {
     ew.sys.buzz.nav(ew.sys.buzz.type.na);
@@ -502,219 +458,219 @@ ew.UI.nav = {
 // === Touch Handler ===
 
 ew.sys.TC = {
-	x: 0,
-	y: 0,
-	run: 0,
-	tid: { nav: 0, fire: 0 },
-	val: { cur: 0, up: 0, dn: 0, follow: 1 },
-	start: function() {
-		//Bangle.setLCDPower(1);
-		//Bangle.setOptions({lockTimeout:0})
-		digitalPulse(ew.pin.touch.RST, 1, [5, 50]);
-		if (!this.run) this.init();
-	},
-	init: function() {
-		this.run = 1;
-		Bangle.on('drag', (data) => {
-			if (1 < this.dbg) console.log("tc drag data:", data);
-			if (this.dbg) console.log("tc start",this.nav);
-			// ---- slider ----
-			if (ew.is.slide && 116 < data.y) this.bar(data);
+  x: 0,
+  y: 0,
+  run: 0,
+  tid: { nav: 0, fire: 0 },
+  val: { cur: 0, up: 0, dn: 0, follow: 1 },
+  start: function () {
+    //Bangle.setLCDPower(1);
+    //Bangle.setOptions({lockTimeout:0})
+    digitalPulse(ew.pin.touch.RST, 1, [5, 50]);
+    if (!this.run) this.init();
+  },
+  init: function () {
+    this.run = 1;
+    Bangle.on('drag', (data) => {
+      if (1 < this.dbg) console.log("tc drag data:", data);
+      if (this.dbg) console.log("tc start", this.nav);
+      // ---- slider ----
+      if (ew.is.slide && 116 < data.y) this.bar(data);
 
-			// ---- nav ----
-			else if (data.b && !this.nav) {
-				if (this.dbg) console.log("tc drag nav:", data);
+      // ---- nav ----
+      else if (data.b && !this.nav) {
+        if (this.dbg) console.log("tc drag nav:", data);
 
-				if (this.tid.fire) {
-					if (this.dbg) console.log("tc bar clear fire tid");
-					clearInterval(this.tid.fire);
-					this.tid.fire = 0;
-					this.long = 0
-				}
+        if (this.tid.fire) {
+          if (this.dbg) console.log("tc bar clear fire tid");
+          clearInterval(this.tid.fire);
+          this.tid.fire = 0;
+          this.long = 0
+        }
 
-				// ---- gestures ----
-				if (data.dy <= -3) {
-					ew.UI.nav.up(data.x, data.y);
-					this.nav = 1;
-					ew.face.off();
-				}
-				else if (3 <= data.dy) {
-					ew.UI.nav.dn(data.x, data.y);
-					this.nav = 1;
-					ew.face.off();
-				}
-				else if (data.dx <= -3) {
-					ew.UI.nav.next();
-					this.nav = 1;
-					ew.face.off();
-				}
-				else if (3 <= data.dx) {
-					ew.UI.nav.back();
-					this.nav = 1;
-					ew.face.off();
-				}
+        // ---- gestures ----
+        if (data.dy <= -3) {
+          ew.UI.nav.up(data.x, data.y);
+          this.nav = 1;
+          //ew.face.off();
+        }
+        else if (3 <= data.dy) {
+          ew.UI.nav.dn(data.x, data.y);
+          this.nav = 1;
+          //ew.face.off();
+        }
+        else if (data.dx <= -3) {
+          ew.UI.nav.next();
+          this.nav = 1;
+          //ew.face.off();
+        }
+        else if (3 <= data.dx) {
+          ew.UI.nav.back();
+          this.nav = 1;
+          //ew.face.off();
+        }
 
-				// ---- long press ----
-				else if (!this.tid.nav) {
-					if (this.dbg) console.log("tc nav long:", data);
+        // ---- long press ----
+        else if (!this.tid.nav) {
+          if (this.dbg) console.log("tc nav long:", data);
 
-					this.tid.nav = setTimeout((data) => {
-						this.tid.nav=0;
-						if (this.dbg) console.log("tc nav long fire:", data);
-						this.nav = 1;
-						ew.UI.c.xy(data.x, data.y, 1);
-					}, 1000, data);
-				}
-			}
+          this.tid.nav = setTimeout((data) => {
+            this.tid.nav = 0;
+            if (this.dbg) console.log("tc nav long fire:", data);
+            this.nav = 1;
+            ew.UI.c.xy(data.x, data.y, 1);
+          }, 1000, data);
+        }
+      }
 
-			// ---- short press ----
-			else if (!data.b) {
-				if (this.tid.nav) {
-					if (this.dbg) console.log("tc nav long clear:", data);
-					clearTimeout(this.tid.nav);
-					this.tid.nav = 0;
-				}
+      // ---- short press ----
+      else if (!data.b) {
+        if (this.tid.nav) {
+          if (this.dbg) console.log("tc nav long clear:", data);
+          clearTimeout(this.tid.nav);
+          this.tid.nav = 0;
+        }
 
-				if (!this.nav) {
-					if (this.dbg) console.log("tc nav short fire:", data);
-					if (ew.UI.ntid && !ew.is.UIpri && !ew.is.bar  && 116 < data.y) {
-	        			clearTimeout(ew.UI.ntid);
-	        			ew.UI.ntid = 0;
-	        			ew.UI.rtb();
-					}
-					else ew.UI.c.xy(data.x, data.y, 0);
-				}
-				this.nav = 0;
-			}
-		});
-	},
-	move: function(data) {
-		"ram";
-		this.step = 1;
-		this.long = 1;
+        if (!this.nav) {
+          if (this.dbg) console.log("tc nav short fire:", data);
+          if (ew.UI.ntid && !ew.is.UIpri && !ew.is.bar && 116 < data.y) {
+            clearTimeout(ew.UI.ntid);
+            ew.UI.ntid = 0;
+            ew.UI.rtb();
+          }
+          else ew.UI.c.xy(data.x, data.y, 0);
+        }
+        this.nav = 0;
+      }
+    });
+  },
+  move: function (data) {
+    "ram";
+    this.step = 1;
+    this.long = 1;
 
-		// ---- rapid fire mode ----
-		if (this.val.fire) {
-			if (this.dbg) console.log("tc: move fire mode");
-			let fire = 1;
-			if (!this.tid.fire) this.tid.fire = setInterval(() => {
-				fire++;
-				this.val.cur = this.val.cur + this.side
-				if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
-				else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
-				ew.UI.c.tcBar(this.side, this.val.cur, fire);
+    // ---- rapid fire mode ----
+    if (this.val.fire) {
+      if (this.dbg) console.log("tc: move fire mode");
+      let fire = 1;
+      if (!this.tid.fire) this.tid.fire = setInterval(() => {
+        fire++;
+        this.val.cur = this.val.cur + this.side
+        if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
+        else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
+        ew.UI.c.tcBar(this.side, this.val.cur, fire);
 
-			}, 50, fire);
+      }, 50, fire);
 
-		// ---- follow finger mode ----
-		}
-		else {
-			if (this.dbg) console.log("tc: move follow mode");
-			if (this.seg > this.val.up) this.seg = this.val.up;
-			else if (this.seg < this.val.dn) this.seg = this.val.dn;
-			this.val.cur = this.seg;
-			ew.UI.c.tcBar(0, this.seg);
-		}
+      // ---- follow finger mode ----
+    }
+    else {
+      if (this.dbg) console.log("tc: move follow mode");
+      if (this.seg > this.val.up) this.seg = this.val.up;
+      else if (this.seg < this.val.dn) this.seg = this.val.dn;
+      this.val.cur = this.seg;
+      ew.UI.c.tcBar(0, this.seg);
+    }
 
-	},
-	bar: function(data) {
-		"ram";
-		if (data.dy) return;
+  },
+  bar: function (data) {
+    "ram";
+    if (data.dy) return;
 
-		// ---- finger on screen ----
-		if (data.b) {
-			this.seg = this.val.dn + ((data.x - 5) * (this.val.up - this.val.dn) / 140) | 0;
-			this.side = (data.x < 88) ? -1 : 1;
+    // ---- finger on screen ----
+    if (data.b) {
+      this.seg = this.val.dn + ((data.x - 5) * (this.val.up - this.val.dn) / 140) | 0;
+      this.side = (data.x < 88) ? -1 : 1;
 
-			// ---- long mode start ----
-			if (!this.tid.nav) {
-				if (this.dbg) console.log("tc: bar tid");
-				this.tid.nav = setTimeout(() => {
-					ew.sys.buzz.nav(25);
-					this.move();
-				}, 1000, data);
-			}
+      // ---- long mode start ----
+      if (!this.tid.nav) {
+        if (this.dbg) console.log("tc: bar tid");
+        this.tid.nav = setTimeout(() => {
+          ew.sys.buzz.nav(25);
+          this.move();
+        }, 1000, data);
+      }
 
-			// ---- long mode ----
-			if (this.long) {
-				if (this.dbg) console.log("tc: bar long");
-				this.move();
-			}
+      // ---- long mode ----
+      if (this.long) {
+        if (this.dbg) console.log("tc: bar long");
+        this.move();
+      }
 
-			// ---- slide mode ----
-			else {
+      // ---- slide mode ----
+      else {
 
-				if (this.dbg) console.log("tc: bar else");
-				if (this.val.reverce) this.val.tmp = this.val.tmp - data.dx;
-				else this.val.tmp = this.val.tmp + data.dx;
-				let len = this.val.len || 20;
-				this.step = this.val.tmp / len | 0;
-				if (this.step) {
-					if (this.tid.nav) {
-						if (this.dbg) console.log("tc bar clear move tid");
-						clearTimeout(this.tid.nav);
-						this.tid.nav = 0;
-					}
-					if (this.dbg) console.log("tc: bar step", this.step);
-					this.val.cur = this.val.cur + this.step;
-					this.val.tmp = 0;
-					if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
-					else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
-					ew.sys.buzz.nav(10);
-					ew.UI.c.tcBar(this.side, this.val.cur);
-				}
-			}
-		}
+        if (this.dbg) console.log("tc: bar else");
+        if (this.val.reverce) this.val.tmp = this.val.tmp - data.dx;
+        else this.val.tmp = this.val.tmp + data.dx;
+        let len = this.val.len || 20;
+        this.step = this.val.tmp / len | 0;
+        if (this.step) {
+          if (this.tid.nav) {
+            if (this.dbg) console.log("tc bar clear move tid");
+            clearTimeout(this.tid.nav);
+            this.tid.nav = 0;
+          }
+          if (this.dbg) console.log("tc: bar step", this.step);
+          this.val.cur = this.val.cur + this.step;
+          this.val.tmp = 0;
+          if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
+          else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
+          ew.sys.buzz.nav(10);
+          ew.UI.c.tcBar(this.side, this.val.cur);
+        }
+      }
+    }
 
-		// ---- finger off screen ----
-		else {
-			if (this.dbg) console.log("tc data.b=0:", data);
+    // ---- finger off screen ----
+    else {
+      if (this.dbg) console.log("tc data.b=0:", data);
 
-			if (this.tid.nav) {
-				if (this.dbg) console.log("tc bar clear move tid");
-				clearTimeout(this.tid.nav);
-				this.tid.nav = 0;
-			}
+      if (this.tid.nav) {
+        if (this.dbg) console.log("tc bar clear move tid");
+        clearTimeout(this.tid.nav);
+        this.tid.nav = 0;
+      }
 
-			if (this.tid.fire) {
-				if (this.dbg) console.log("tc bar clear fire tid");
-				clearInterval(this.tid.fire);
-				this.tid.fire = 0;
-			}
+      if (this.tid.fire) {
+        if (this.dbg) console.log("tc bar clear fire tid");
+        clearInterval(this.tid.fire);
+        this.tid.fire = 0;
+      }
 
-			this.long = 0;
+      this.long = 0;
 
-			// ---- tap mode ----
-			if (!this.step) {
-				this.val.cur = this.val.cur + this.side;
-				if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
-				else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
-				ew.UI.c.tcBar(this.side, this.val.cur);
-			}
-			this.step = 0;
-			ew.face.off();
-		}
-	},
-	stop: function() {
-		if (this.dbg) console.log("tc stop");
+      // ---- tap mode ----
+      if (!this.step) {
+        this.val.cur = this.val.cur + this.side;
+        if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
+        else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
+        ew.UI.c.tcBar(this.side, this.val.cur);
+      }
+      this.step = 0;
+      //ew.face.off();
+    }
+  },
+  stop: function () {
+    if (this.dbg) console.log("tc stop");
 
-		if (this.tid.nav) {
-			if (this.dbg) console.log("tc stop  clear move tid");
-			clearTimeout(this.tid.nav);
-			this.tid.nav = 0;
-		}
+    if (this.tid.nav) {
+      if (this.dbg) console.log("tc stop  clear move tid");
+      clearTimeout(this.tid.nav);
+      this.tid.nav = 0;
+    }
 
-		if (this.tid.fire) {
-			if (this.dbg) console.log("tc stop clear fire tid");
-			clearInterval(this.tid.fire);
-			this.tid.fire = 0;
-		}
-		setTimeout(()=>{
-			digitalPulse(ew.pin.touch.RST, 1, [5, 50]);
-			setTimeout(() => { Bangle.touchWr(ew.pin.touch.SLP, 3); ew.sys.TC.nav = 0; }, 100);
-		},200);
-		return true;
-	}
+    if (this.tid.fire) {
+      if (this.dbg) console.log("tc stop clear fire tid");
+      clearInterval(this.tid.fire);
+      this.tid.fire = 0;
+    }
+    setTimeout(() => {
+      digitalPulse(ew.pin.touch.RST, 1, [5, 50]);
+      setTimeout(() => { Bangle.touchWr(ew.pin.touch.SLP, 3); ew.sys.TC.nav = 0; }, 100);
+    }, 200);
+    return true;
+  }
 };
 
 
