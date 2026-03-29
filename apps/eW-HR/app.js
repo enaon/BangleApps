@@ -518,8 +518,6 @@ ew.face[0] = {
         if (ew.is.UIpri || ew.UI.ntid) return;
         ew.UI.c.start(0, 1);
         ew.UI.c.end();
-        ew.UI.ele.fill("_bar", 6, 0);
-
 
         if (ew.apps.hr.state.def.page === 0) {
             ew.is.slide = 0;
@@ -527,6 +525,7 @@ ew.face[0] = {
             return;
         }
 
+        ew.UI.ele.fill("_bar", 6, 0);
         if (!this.data.loading && this.data.source.length > 0) {
             ew.sys.TC.val = {
                 cur: this.data.pos,
