@@ -4,7 +4,7 @@
   "version":"0.01",
   "author": "enaon",
   "description": "Heart rate live/stats viewer",
-  "dependencies" : { "eW-UI":"module" },
+  "dependencies" : { "eW-UI":"app" },
   "icon": "app.png",
   "tags": "",
   "supports" : ["BANGLEJS2"],
