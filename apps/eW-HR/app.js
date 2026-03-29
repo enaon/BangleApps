@@ -465,7 +465,7 @@ ew.face[0] = {
 
             let oldX = startX + oldPos * (bw + space);
             let oldEntry = this.data.source[oldPos];
-            let oldBarH = oldEntry.hr * scale;
+            let oldBarH = oldEntry.bpm * scale;
 
             let color = topL < oldEntry.hr ? 13 : oldEntry.hr < btmL ? 4 : 9;
 
@@ -475,7 +475,7 @@ ew.face[0] = {
             // 2. Βάλε highlight στη νέα επιλεγμένη μπάρα
             let newX = startX + newPos * (bw + space);
             let newEntry = this.data.source[newPos];
-            let newBarH = newEntry.hr * scale;
+            let newBarH = newEntry.bpm * scale;
 
             g.setCol(1, 15); // highlight color
             g.fillRect(newX, graphTop + graphHeight - newBarH, newX + bw, graphTop + graphHeight);
@@ -486,7 +486,7 @@ ew.face[0] = {
             // Draw bars
             for (let i = 0; i < fields; i++) {
                 let entry = this.data.source[i];
-                let barH = entry.hr * scale;
+                let barH = entry.bpm * scale;
                 let x = startX + i * (bw + space);
                 let isSelected = (i === this.data.pos);
 
@@ -510,7 +510,7 @@ ew.face[0] = {
         this.tid = setTimeout(() => {
             this.tid = 0;
             this.dI()
-        }, 10)
+        }, 25)
 
     },
 
@@ -672,7 +672,7 @@ ew.face[1] = {
                 ew.sys.buzz.nav(ew.sys.buzz.type.ok);
                 ew.UI.btn.ntfy(1, 3, 0, "_bar", 6, "< TOP LIMMIT >", "", 15, 6, 1);
                 ew.is.slide = 1;
-                ew.sys.TC.val = { cur: ew.apps.hr.state.def.topL, dn: 80, up: 140, tmp: 0, fire: 0 };
+                ew.sys.TC.val = { cur: ew.apps.hr.state.def.topL, dn: 80, up: 140, tmp: 0, fire: 1 };
                 ew.UI.c.tcBar = (a, b, r) => {
                     let val = ew.apps.hr.state.def.topL;
                     ew.UI.btn.ntfy(0, 2, 1);
@@ -687,7 +687,7 @@ ew.face[1] = {
                 ew.sys.buzz.nav(ew.sys.buzz.type.ok);
                 ew.UI.btn.ntfy(1, 3, 0, "_bar", 6, "< BTM LIMMIT >", "", 15, 6, 1);
                 ew.is.slide = 1;
-                ew.sys.TC.val = { cur: ew.apps.hr.state.def.btmL, dn: 40, up:80, tmp: 0, fire: 0 };
+                ew.sys.TC.val = { cur: ew.apps.hr.state.def.btmL, dn: 40, up:80, tmp: 0, fire: 1 };
                 ew.UI.c.tcBar = (a, b, r) => {
                     ew.UI.btn.ntfy(0, 2, 1);
                     if (11 < r && ew.sys.TC.val.dn < val && val < ew.sys.TC.val.up) val = val + (a * (20 < r ? 10 : 5));
