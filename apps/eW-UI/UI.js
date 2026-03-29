@@ -1,6 +1,6 @@
 // === eW object === 
 
-global.ew = { "face":{},"sys": {}, "apps": {}, "dbg": 0, "logger": {}, "notify": {}, "log": [], "def": {}, "is": {}, "comm": {}, "tid": {}, "pin": {} };
+global.ew = { "face":{},"sys": {}, "apps": {}, "dbg": 0, "logger": {}, "notify": {}, "log": [], "def": {}, "is": {}, "comm": {}, "tid": {}, "pin": {}, UI:{}};
 ew.pin = { BAT: D3, CHRG: D23, BUZZ: D19, BUZ0: 1, BL: D8, i2c: { SCL: D34, SDA: D33 }, touch: { SCL: D34, SDA: D33, RST: D35, INT: D36, SLP: 0xE5 }, disp: { CS: D5, DC: D6, RST: D7, BL: D8 }, acc: { SDA: D37, SLC: D38, INT: D39 } };
 Bangle.setOptions({ wakeOnTouch: 0, lockTimeout: 0, backlightTimeout: 0, wakeOnBTN1: 0, wakeOnTwist: 0, wakeOnFaceUp: 0, powerSave: 1, btnLoadTimeout: 5000 });
 Bangle.setLocked(0);
