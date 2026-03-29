@@ -380,7 +380,7 @@ ew.face[0] = {
         let timeStr = "time: " + hours + ":" + mins;
         ew.UI.btn.c2l("main", "_main", 6, timeStr, "", 15, 1, 18, 2, "Vector");
     },
-    dG: function (update, newPos) {
+    /*dG: function (update, newPos) {
         if (ew.UI.ntid) return;
 
         const margin = 2;
@@ -426,6 +426,92 @@ ew.face[0] = {
             this.tid = 0;
             this.dI();
         }, 50);
+    },
+*/
+   dG: function(update, newPos) {
+        if (ew.UI.ntid) return;
+
+        const margin = 2;
+        const width = g.getWidth() - margin;
+        const bottom = g.getHeight();
+        const graphTop = 130;
+        const graphHeight = 45;
+        const fields = this.data.source.length;
+        const space = 3;
+        const topL = this.data.topL;
+        const btmL = this.data.btmL;
+
+        if (fields === 0) return;
+
+        const MAX_BAR_WIDTH = 30;
+
+        let bw, startX;
+        if (fields * (MAX_BAR_WIDTH + space) <= width) {
+            bw = MAX_BAR_WIDTH;
+            let totalWidth = fields * (bw + space);
+            startX = margin + (width - totalWidth) / 2;
+        }
+        else {
+            bw = (width - (fields * space)) / fields;
+            startX = margin;
+        }
+
+        // Scale for bars
+        let scale = graphHeight / this.data.max;
+
+        if (update) {
+            let oldPos = this.data.posL; // προηγούμενη θέση
+            newPos; 
+
+            let oldX = startX + oldPos * (bw + space);
+            let oldEntry = this.data.source[oldPos];
+            let oldBarH = oldEntry.hr * scale;
+
+            let color = topL < oldEntry.hr ? 13 : oldEntry.hr < btmL ? 4 : 9;
+
+            g.setCol(1, color);
+            g.fillRect(oldX, graphTop + graphHeight - oldBarH, oldX + bw, graphTop + graphHeight);
+
+            // 2. Βάλε highlight στη νέα επιλεγμένη μπάρα
+            let newX = startX + newPos * (bw + space);
+            let newEntry = this.data.source[newPos];
+            let newBarH = newEntry.hr * scale;
+
+            g.setCol(1, 15); // highlight color
+            g.fillRect(newX, graphTop + graphHeight - newBarH, newX + bw, graphTop + graphHeight);
+
+        }
+        else {
+
+            // Draw bars
+            for (let i = 0; i < fields; i++) {
+                let entry = this.data.source[i];
+                let barH = entry.hr * scale;
+                let x = startX + i * (bw + space);
+                let isSelected = (i === this.data.pos);
+
+                let color = topL < entry.hr ? 13 : entry.hr < btmL ? 4 : 9;
+
+                g.setCol(1, isSelected ? 15 : color);
+                g.fillRect(x, graphTop + graphHeight - barH, x + bw, graphTop + graphHeight);
+
+            }
+            /*
+                    // Highlight selected bar
+                    if (this.data.pos < fields) {
+                        let x = startX + this.data.pos * (bw + space);
+                        g.setCol(1, 14);
+                        g.drawRect(x - 1, graphTop - 1, x + bw + 1, graphTop + graphHeight + 1);
+                    }
+            */
+        }
+
+        if (this.tid) clearTimeout(this.tid);
+        this.tid = setTimeout(() => {
+            this.tid = 0;
+            this.dI()
+        }, 10)
+
     },
 
     dRTG: function () {
