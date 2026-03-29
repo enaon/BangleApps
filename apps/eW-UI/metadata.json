@@ -4,7 +4,7 @@
   "version":"0.01",
   "author": "enaon",
   "description": "UI support for eW apps",
-  "type": "module",
+  "type": "system",
   "tags": "tool,system",
   "supports" : ["BANGLEJS2"],
   "readme": "README.md",
