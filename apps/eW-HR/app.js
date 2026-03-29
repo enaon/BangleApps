@@ -1,5 +1,4 @@
 // place your const, vars, functions or classes here
-
 // init UI
 eval(require('Storage').read('eW-UI.js'));
 ew.sys.TC.init();
