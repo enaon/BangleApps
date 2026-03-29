@@ -66,10 +66,8 @@ Graphics.prototype.setFontDylex7x13 = function () {
 // === UI ===
 
 ew.UI = {
-  ew.UI.size = { _2x2: 20, _2x1: 25, _txt: 19, t1: 8, t2: 28, t3: 34, txt: 0.8, len: 1, sca: 0.75 };
-
-  ew.UI.pos = {
-
+  size : { _2x2: 20, _2x1: 25, _txt: 19, t1: 8, t2: 28, t3: 34, txt: 0.8, len: 1, sca: 0.75 },
+  pos : {
     _2x1: [25, [89],
       [45, 122],
       [176],
@@ -111,11 +109,7 @@ ew.UI = {
     _ind: [50, 116, 126, 124, 0, 176],
     _foot: [142, 132, 155]
 
-  };
-
-
-
-
+  },
   loc: function (no, po) {
     let m = {};
     const p = (ew.UI.pos[no]);
@@ -360,10 +354,8 @@ ew.UI = {
       //"ram";
       let m = ew.UI.loc(no, po);
       ew.UI.c.raw[loc] = ew.UI.c.raw[loc] + `${ew.UI.c.raw[loc] == " " ? '' : 'else '}if (${m.x}-${m.szX}<x&&x<${m.x}+${m.szX}&&${m.y}-${m.szY}<y&&y<${m.y}+${m.szY}) ew.UI.c.${loc}.${no}(${po},l);`;
-    },
-
+    }
   },
-},
   rtb: function () {
     if (ew.UI.ntid) {
       clearTimeout(ew.UI.ntid);
