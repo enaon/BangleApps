@@ -600,14 +600,14 @@ ew.sys.TC = {
 
       // ---- slide mode ----
       else {
-
         if (this.dbg) console.log("tc: bar else");
         if (this.val.reverce) this.val.tmp = this.val.tmp - data.dx;
         else this.val.tmp = this.val.tmp + data.dx;
-        let len = this.val.len || 20;
+        let len = this.val.len || 200/(this.val.up-this.val.dn);
         this.step = this.val.tmp / len | 0;
         if (this.step) {
           if (this.tid.nav) {
+            this.slide=1;
             if (this.dbg) console.log("tc bar clear move tid");
             clearTimeout(this.tid.nav);
             this.tid.nav = 0;
@@ -621,6 +621,7 @@ ew.sys.TC = {
           ew.UI.c.tcBar(this.side, this.val.cur);
         }
       }
+
     }
 
     // ---- finger off screen ----
@@ -640,16 +641,16 @@ ew.sys.TC = {
       }
 
       this.long = 0;
-
+    
       // ---- tap mode ----
-      if (!this.step) {
+      if (!this.slide) {
         ew.sys.buzz.nav(15);
         this.val.cur = this.val.cur + this.side;
         if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
         else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
         ew.UI.c.tcBar(this.side, this.val.cur);
       }
-      this.step = 0;
+      this.slide = 0;
       //ew.face.off();
     }
   },

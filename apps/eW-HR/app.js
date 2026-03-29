@@ -35,6 +35,9 @@ Bangle.setUI({ mode: "custom", "btn": function () {
     Bangle.load(); 
     } });
 
+// clear screen
+ew.UI.ele.fill("_main", 15, 0);
+
 // HR page
 ew.face[0] = {
     data: {
@@ -75,7 +78,7 @@ ew.face[0] = {
         // Start real time HR monitor
         Bangle.setHRMPower(1, "ew");
         Bangle.on("HRM", this.hrmRT);
-
+        
         ew.UI.btn.ntfy(1, 1.5, 0, "_bar", 6, "HEART RATE", "", 15, 1);
 
         // UI control Start
@@ -628,7 +631,6 @@ ew.face[1] = {
                 ew.is.slide = 1;
                 ew.sys.TC.val = { cur: ew.apps.hr.state.def.topL, dn: 80, up: 140, tmp: 0, fire: 1 };
                 ew.UI.c.tcBar = (a, b, r) => {
-                    let val = ew.apps.hr.state.def.topL;
                     ew.UI.btn.ntfy(0, 2, 1);
                     if (11 < r && ew.sys.TC.val.dn < val && val < ew.sys.TC.val.up) val = val + (a * (20 < r ? 10 : 5));
                     else val = b;
