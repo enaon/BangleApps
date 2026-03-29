@@ -643,7 +643,7 @@ ew.sys.TC = {
 
       // ---- tap mode ----
       if (!this.step) {
-        ew.sys.buzz.nav(25);
+        ew.sys.buzz.nav(15);
         this.val.cur = this.val.cur + this.side;
         if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
         else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
