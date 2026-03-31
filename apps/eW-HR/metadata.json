@@ -1,7 +1,7 @@
 { "id": "eW-HR",
   "name": "Heart rate live/stats viewer",
   "shortName":"eW-HR ",
-  "version":"0.02",
+  "version":"0.03",
   "author": "enaon",
   "description": "Heart rate live/stats viewer",
   "dependencies" : { "eW-UI":"app" },
