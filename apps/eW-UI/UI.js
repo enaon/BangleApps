@@ -538,7 +538,6 @@ ew.sys.TC = {
         return;
       }
 
-      print("lost");
     });
   },
 
