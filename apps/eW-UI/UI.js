@@ -638,6 +638,7 @@ ew.sys.TC = {
       else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
       ew.UI.c.tcBar(this.side, this.val.cur);
     }
+ 		this.tmp = 0;
     this.slide = 0;
     this.long = 0;
   
