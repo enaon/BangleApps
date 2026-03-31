@@ -424,7 +424,7 @@ ew.face[0] = {
             let oldEntry = this.data.source[oldPos];
             let oldBarH = oldEntry.bpm * scale;
 
-            let color = topL < oldEntry.bpm ? 13 : oldEntry.bpm < btmL ? 4 : 9;
+            let color = topL < oldEntry.bpm ? 13 : oldEntry.bpm < btmL ? 9 : 4;
             
             // revert old pos
             g.setCol(1, color);
@@ -450,7 +450,7 @@ ew.face[0] = {
                 let x = startX + i * (bw + space);
                 let isSelected = (i === this.data.pos);
 
-                let color = topL < entry.bpm ? 13 : entry.bpm < btmL ? 4 : 9;
+                let color = topL < entry.bpm ? 13 : entry.bpm < btmL ? 9 : 4;
 
                 g.setCol(1, isSelected ? 15 : color);
                 if (isSelected) g.fillRect(x, graphTop -5, x + bw, graphTop-2 );
