@@ -462,78 +462,71 @@ ew.sys.TC = {
   x: 0,
   y: 0,
   run: 0,
-  tid: { nav: 0, fire: 0 },
+  tmp:0,
+  tid: { fire: 0, long: 0 },
   val: { cur: 0, up: 0, dn: 0, follow: 1 },
-  start: function () {
-    //Bangle.setLCDPower(1);
-    //Bangle.setOptions({lockTimeout:0})
-    digitalPulse(ew.pin.touch.RST, 1, [5, 50]);
-    if (!this.run) this.init();
-  },
+
   init: function () {
     this.run = 1;
     Bangle.on('drag', (data) => {
-      if (1 < this.dbg) console.log("tc drag data:", data);
-      if (this.dbg) console.log("tc start", this.nav);
+
       // ---- slider ----
-      if (ew.is.slide && 116 < data.y) this.bar(data);
+      if (ew.is.slide && 116 < data.y && -10 < data.dy) {
+        this.bar(data);
+        return;
+      }
+      
+      if (this.tid.long) {
+          clearTimeout(this.tid.long);
+          this.tid.long = 0;
+      }
 
-      // ---- nav ----
-      else if (data.b && !this.nav) {
-        if (this.dbg) console.log("tc drag nav:", data);
-
-        if (this.tid.fire) {
-          if (this.dbg) console.log("tc bar clear fire tid");
+      if (this.tid.fire) {
           clearInterval(this.tid.fire);
           this.tid.fire = 0;
-          this.long = 0
-        }
-
-        // ---- gestures ----
+      }
+      
+      // ---- nav - gestures & long press ----
+      if (data.b && !this.nav) {
+        
+         // ---- gestures ----
         if (data.dy <= -3) {
           ew.UI.nav.up(data.x, data.y);
           this.nav = 1;
-          //ew.face.off();
+          return;
         }
-        else if (3 <= data.dy) {
+        if (3 <= data.dy) {
           ew.UI.nav.dn(data.x, data.y);
           this.nav = 1;
-          //ew.face.off();
+          return;
         }
-        else if (data.dx <= -3) {
+        if (data.dx <= -3) {
           ew.UI.nav.next();
           this.nav = 1;
-          //ew.face.off();
+          return;
         }
-        else if (3 <= data.dx) {
+        if (3 <= data.dx) {
           ew.UI.nav.back();
           this.nav = 1;
-          //ew.face.off();
+          return;
         }
 
         // ---- long press ----
-        else if (!this.tid.nav) {
-          if (this.dbg) console.log("tc nav long:", data);
-
-          this.tid.nav = setTimeout((data) => {
-            this.tid.nav = 0;
-            if (this.dbg) console.log("tc nav long fire:", data);
+        if (!this.tid.long) {
+          this.tid.long = setTimeout((data) => {
+            this.tid.long = 0;
             this.nav = 1;
             ew.UI.c.xy(data.x, data.y, 1);
           }, 1000, data);
         }
+
+        return;
       }
 
       // ---- short press ----
-      else if (!data.b) {
-        if (this.tid.nav) {
-          if (this.dbg) console.log("tc nav long clear:", data);
-          clearTimeout(this.tid.nav);
-          this.tid.nav = 0;
-        }
+      if (!data.b) {
 
         if (!this.nav) {
-          if (this.dbg) console.log("tc nav short fire:", data);
           if (ew.UI.ntid && !ew.is.UIpri && !ew.is.bar && 116 < data.y) {
             clearTimeout(ew.UI.ntid);
             ew.UI.ntid = 0;
@@ -542,31 +535,36 @@ ew.sys.TC = {
           else ew.UI.c.xy(data.x, data.y, 0);
         }
         this.nav = 0;
+        return;
       }
+
+      print("lost");
     });
   },
+
   move: function (data) {
     "ram";
-    this.step = 1;
+    this.slide = 1;
     this.long = 1;
 
     // ---- rapid fire mode ----
     if (this.val.fire) {
-      if (this.dbg) console.log("tc: move fire mode");
       let fire = 1;
-      if (!this.tid.fire) this.tid.fire = setInterval(() => {
-        fire++;
-        this.val.cur = this.val.cur + this.side
-        if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
-        else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
-        ew.UI.c.tcBar(this.side, this.val.cur, fire);
+      if (!this.tid.fire) 
+        this.tid.fire = setInterval(() => {
+          fire++;
+          this.val.cur = this.val.cur + this.side
+          if (this.val.up < this.val.cur) 
+            this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
+          else if (this.val.cur < this.val.dn) 
+            this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
+          ew.UI.c.tcBar(this.side, this.val.cur, fire);
+        }, 50, fire);
 
-      }, 50, fire);
-
-      // ---- follow finger mode ----
     }
+    // ---- follow finger mode ----
     else {
-      if (this.dbg) console.log("tc: move follow mode");
+      this.seg = this.val.dn + ((data.x - 5) * (this.val.up - this.val.dn) / 140) | 0;
       if (this.seg > this.val.up) this.seg = this.val.up;
       else if (this.seg < this.val.dn) this.seg = this.val.dn;
       this.val.cur = this.seg;
@@ -576,103 +574,73 @@ ew.sys.TC = {
   },
   bar: function (data) {
     "ram";
-    if (data.dy) return;
-
     // ---- finger on screen ----
     if (data.b) {
-      this.seg = this.val.dn + ((data.x - 5) * (this.val.up - this.val.dn) / 140) | 0;
+
       this.side = (data.x < 88) ? -1 : 1;
 
       // ---- long mode start ----
-      if (!this.tid.nav) {
-        if (this.dbg) console.log("tc: bar tid");
-        this.tid.nav = setTimeout(() => {
+      if (!this.tid.long && !this.long) {
+        this.tid.long = setTimeout(() => {
+          this.tid.long = 0;
+          this.move(data);
           ew.sys.buzz.nav(25);
-          this.move();
-        }, 1000, data);
+        }, 1000);
       }
 
       // ---- long mode ----
       if (this.long) {
-        if (this.dbg) console.log("tc: bar long");
-        this.move();
+        this.move(data);
+        return;
       }
 
       // ---- slide mode ----
-      else {
-        if (this.dbg) console.log("tc: bar else");
-        if (this.val.reverce) this.val.tmp = this.val.tmp - data.dx;
-        else this.val.tmp = this.val.tmp + data.dx;
-        let len = this.val.len || 200/(this.val.up-this.val.dn);
-        this.step = this.val.tmp / len | 0;
-        if (this.step) {
-          if (this.tid.nav) {
-            this.slide=1;
-            if (this.dbg) console.log("tc bar clear move tid");
-            clearTimeout(this.tid.nav);
-            this.tid.nav = 0;
-          }
-          if (this.dbg) console.log("tc: bar step", this.step);
-          this.val.cur = this.val.cur + this.step;
-          this.val.tmp = 0;
-          if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
-          else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
-          ew.sys.buzz.nav(10);
-          ew.UI.c.tcBar(this.side, this.val.cur);
+      if (this.val.reverce) 
+        this.tmp -= data.dx;
+      else 
+        this.tmp += data.dx;
+      let lim=(200/(this.val.up-this.val.dn))|0;
+			let len = this.val.len || lim <7 ? 7 : 20 <lim ?20: lim;
+      this.step = (this.tmp / len) | 0;
+      if (this.step) {
+        this.slide=1;
+        if (this.tid.long) {
+          clearTimeout(this.tid.long);
+          this.tid.long = 0;
         }
+        //let abs=(this.step < 0 ? -this.step : this.step);
+        this.val.cur += this.step; //(abs<3)? this.step/abs:2*this.step;
+        this.tmp = 0;
+        if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
+        else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
+        ew.sys.buzz.nav(10);
+        ew.UI.c.tcBar(this.side, this.val.cur);
       }
-
+      
+      return;
     }
 
     // ---- finger off screen ----
-    else {
-      if (this.dbg) console.log("tc data.b=0:", data);
-
-      if (this.tid.nav) {
-        if (this.dbg) console.log("tc bar clear move tid");
-        clearTimeout(this.tid.nav);
-        this.tid.nav = 0;
-      }
-
-      if (this.tid.fire) {
-        if (this.dbg) console.log("tc bar clear fire tid");
-        clearInterval(this.tid.fire);
-        this.tid.fire = 0;
-      }
-
-      this.long = 0;
-    
-      // ---- tap mode ----
-      if (!this.slide) {
-        ew.sys.buzz.nav(15);
-        this.val.cur = this.val.cur + this.side;
-        if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
-        else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
-        ew.UI.c.tcBar(this.side, this.val.cur);
-      }
-      this.slide = 0;
-      //ew.face.off();
+    if (this.tid.long) {
+      clearTimeout(this.tid.long);
+      this.tid.long = 0;
     }
-  },
-  stop: function () {
-    if (this.dbg) console.log("tc stop");
-
-    if (this.tid.nav) {
-      if (this.dbg) console.log("tc stop  clear move tid");
-      clearTimeout(this.tid.nav);
-      this.tid.nav = 0;
-    }
-
     if (this.tid.fire) {
-      if (this.dbg) console.log("tc stop clear fire tid");
       clearInterval(this.tid.fire);
       this.tid.fire = 0;
     }
-    setTimeout(() => {
-      digitalPulse(ew.pin.touch.RST, 1, [5, 50]);
-      setTimeout(() => { Bangle.touchWr(ew.pin.touch.SLP, 3); ew.sys.TC.nav = 0; }, 100);
-    }, 200);
-    return true;
+
+    // ---- tap mode ----
+    if (!this.slide) {
+      ew.sys.buzz.nav(15);
+      this.val.cur = this.val.cur + this.side;
+      if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
+      else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
+      ew.UI.c.tcBar(this.side, this.val.cur);
+    }
+    this.slide = 0;
+    this.long = 0;
+  
   }
 };
 

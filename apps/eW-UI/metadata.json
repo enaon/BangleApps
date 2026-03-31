@@ -1,7 +1,7 @@
 { "id": "eW-UI",
   "name": "UI support for eW apps",
   "shortName":"eW-UI",
-  "version":"0.01",
+  "version":"0.02",
   "author": "enaon",
   "description": "UI support for eW apps",
   "type": "system",
