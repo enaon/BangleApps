@@ -595,27 +595,27 @@ ew.sys.TC = {
       }
 
       // ---- slide mode ----
-      if (this.val.reverce) 
+      if (this.val.reverce)
         this.tmp -= data.dx;
-      else 
+      else
         this.tmp += data.dx;
-      let lim=(200/(this.val.up-this.val.dn))|0;
-			let len = this.val.len || lim <7 ? 7 : 20 <lim ?20: lim;
+      let lim = (200 / (this.val.up - this.val.dn)) | 0;
+      let len = this.val.len || lim < 10 ? 10 : 50 < lim ? 50 : lim;
       this.step = (this.tmp / len) | 0;
       if (this.step) {
-        this.slide=1;
+        this.slide = 1;
         if (this.tid.long) {
           clearTimeout(this.tid.long);
           this.tid.long = 0;
         }
-        //let abs=(this.step < 0 ? -this.step : this.step);
-        this.val.cur += this.step; //(abs<3)? this.step/abs:2*this.step;
+        let abs = (this.step < 0 ? -this.step : this.step);
+        this.val.cur += (abs < 3 ? this.step : (abs * this.step / 2) | 0);
         this.tmp = 0;
         if (this.val.up < this.val.cur) this.val.cur = (this.val.loop) ? this.val.dn : this.val.up;
         else if (this.val.cur < this.val.dn) this.val.cur = (this.val.loop) ? this.val.up : this.val.dn;
         ew.sys.buzz.nav(10);
         ew.UI.c.tcBar(this.side, this.val.cur);
-      }
+			}
       
       return;
     }
