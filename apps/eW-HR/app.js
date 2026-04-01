@@ -108,15 +108,14 @@ ew.face[0] = {
             face.data.realtime.bpm = hrm.bpm || 0;
             face.data.realtime.conf = hrm.confidence || 0;
             if (!hrm.bpm) {
-                ew.face[0].anim();
+                face.anim();
             }
             face.tid1 = setTimeout(() => {
-                ew.face[0].tid1 = 0;
+                face.tid1 = 0;
                 ew.UI.btn.i2l("main", "_main", 9, "WEAR PROPERLY", "", 15, 6, 1, 8);
             }, 3000);
 
-
-            if (!ew.UI.ntid) face.dRTI();
+            face.dRTI();
         }
     },
 
