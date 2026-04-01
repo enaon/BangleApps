@@ -122,9 +122,8 @@ ew.face[0] = {
 
     anim: function () {
         if (this.hr) clearTimeout(this.hr);
-        this.hr = 0;
         this.hr = setTimeout(() => {
-            clearTimeout(this.hr);
+            this.hr = 0;
             this.cnt--;
             if (this.cnt < 8) { if (this.beat) { this.beat = 0; this.cnt = 13; return; } else { this.beat = 1; this.cnt = 11; } }
             ew.UI.btn.img("main", "_main", 9, "eW-HR.img", "MEASURING", 14, 6, 1.2 + (this.cnt / 10)); this.anim();
