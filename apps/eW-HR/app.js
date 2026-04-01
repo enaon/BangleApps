@@ -23,10 +23,10 @@ ew.face.out=function(){
 // data 
 ew.apps.hr = { state: { def: {} } };
 ew.apps.hr.state.def = Object.assign({
-            hrm: 0,
-            stepGoal: 10000,
-            stepGoalNotification: false
-        }, require("Storage").readJSON("eW-HR.json", true) || {page: 0, topL: 100, btmL: 75 });
+            page: 0,
+            topL: 100,
+            btmL: 75 
+        }, require("Storage").readJSON("eW-HR.json", true) || { });
 
 
 // button
